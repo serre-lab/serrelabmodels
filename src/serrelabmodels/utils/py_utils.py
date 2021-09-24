@@ -12,7 +12,6 @@ def allocate_gpus(num_gpus):
     os.system('nvidia-smi -q -d Memory |grep -A4 GPU|grep Free >tmp')
     free_memory = np.array([int(x.split()[2]) for x in open('tmp', 'r').readlines()])
     gpus = [str(x) for x in np.argsort(free_memory)[::-1]]
-    #l = [str(x) for x, val in enumerate(t) if val > 3000] # specify any memory constraints
     lf = (','.join(gpus[:num_gpus]))    
     os.environ["CUDA_VISIBLE_DEVICES"] = lf
     print('allocating gpus:', lf)

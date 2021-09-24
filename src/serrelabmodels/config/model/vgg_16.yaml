@@ -1,0 +1,8 @@
+name: vgg_hgru
+import_prepath: serrelabmodels.models.vgg_16
+import_class: VGG_16
+args:
+  weight_path: ./model_weights/vgg_16.pth.tar
+  load_weights: true 
+  freeze_layers: true
+  n_layers: 17
