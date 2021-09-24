@@ -50,6 +50,31 @@ gamanet_model = serrelabmodels.base_gamanet.BaseGN()
 
 ## Examples:
 
+#### hGRUCell
+
+```python
+>>> import serrelabmodels.layers.hgru_base as hgru_base
+>>> h = hgru_base.hConvGRUCell(5, 5, 3)
+>>> h2 = hgru_base.hConvGRUCell(5, 5, 3, batchnorm = False)
+>>> h2
+hConvGRUCell(
+  (u1_gate): Conv2d(5, 5, kernel_size=(1, 1), stride=(1, 1))
+  (u2_gate): Conv2d(5, 5, kernel_size=(1, 1), stride=(1, 1))
+)
+>>> h
+hConvGRUCell(
+  (u1_gate): Conv2d(5, 5, kernel_size=(1, 1), stride=(1, 1))
+  (u2_gate): Conv2d(5, 5, kernel_size=(1, 1), stride=(1, 1))
+  (bn): ModuleList(
+    (0): BatchNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): BatchNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): BatchNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): BatchNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+)
+```
+
+
 #### hGRU
 
 ```python
