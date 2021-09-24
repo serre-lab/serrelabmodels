@@ -30,7 +30,6 @@ class hConvGRUCell(nn.Module):
         self.mu= nn.Parameter(torch.empty((hidden_size,1,1)))
 
         if self.batchnorm:
-            #self.bn = nn.ModuleList([nn.GroupNorm(25, 25, eps=1e-03) for i in range(32)])
             self.bn = nn.ModuleList([nn.BatchNorm2d(hidden_size, eps=1e-03) for i in range(4)])
         else:
             self.n = nn.Parameter(torch.randn(self.timesteps,1,1))
@@ -38,12 +37,8 @@ class hConvGRUCell(nn.Module):
         init.orthogonal_(self.w_gate_inh)
         init.orthogonal_(self.w_gate_exc)
         
-#        self.w_gate_inh = nn.Parameter(self.w_gate_inh.reshape(hidden_size , hidden_size , kernel_size, kernel_size))
-#        self.w_gate_exc = nn.Parameter(self.w_gate_exc.reshape(hidden_size , hidden_size , kernel_size, kernel_size))
         self.w_gate_inh.register_hook(lambda grad: (grad + torch.transpose(grad,1,0))*0.5)
         self.w_gate_exc.register_hook(lambda grad: (grad + torch.transpose(grad,1,0))*0.5)
-#        self.w_gate_inh.register_hook(lambda grad: print("inh"))
-#        self.w_gate_exc.register_hook(lambda grad: print("exc"))
         
         init.orthogonal_(self.u1_gate.weight)
         init.orthogonal_(self.u2_gate.weight)
@@ -68,8 +63,6 @@ class hConvGRUCell(nn.Module):
             prev_state2 = torch.empty_like(input_)
             init.xavier_normal_(prev_state2)
         
-
-        #import pdb; pdb.set_trace()
         i = timestep
         if self.batchnorm:
             g1_t = torch.sigmoid(self.bn[0](self.u1_gate(prev_state2)))

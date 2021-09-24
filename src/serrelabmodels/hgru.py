@@ -17,7 +17,7 @@ vgg_example={
     'import_prepath': 'serrelabmodels.models.vgg_16',
     'import_class': 'VGG_16',
     'args': {
-        'weight_path': '/media/data_cifs/model_weights/vgg16.tar.xz',
+        'weight_path': '/media/data_cifs/model_weights/vgg16.pth',
         'load_weights': True,
         'freeze_layers': False,
         'n_layers': 17
