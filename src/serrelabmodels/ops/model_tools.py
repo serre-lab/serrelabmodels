@@ -1,5 +1,5 @@
 import os
-from utils import py_utils
+from serrelabmodels.utils import py_utils
 
 def get_model(cfg):
     print('importing ',cfg['import_prepath'], '.',cfg['import_class'])

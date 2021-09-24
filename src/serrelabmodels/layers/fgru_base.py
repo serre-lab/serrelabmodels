@@ -3,8 +3,8 @@ import torch.nn.functional as F
 import torch
 from torch.nn import init
 
-from utils.pt_utils import conv2d_same_padding, Conv2dSamePadding, tied_conv2d_same_padding, space_tied_conv2d_same_padding
-from utils import pt_utils
+from serrelabmodels.utils.pt_utils import conv2d_same_padding, Conv2dSamePadding, tied_conv2d_same_padding, space_tied_conv2d_same_padding
+from serrelabmodels.utils import pt_utils
 
 import numpy as np
 

@@ -4,7 +4,7 @@ from scipy.special import softmax as np_softmax
 import numpy as np
 from torch.autograd import Variable
 from torch.distributions import uniform, cauchy, normal, relaxed_bernoulli
-from utils.c_x import c_x 
+from serrelabmodels.utils.c_x import c_x 
 from torchdiffeq import odeint, odeint_adjoint
 
 class KuraNet(torch.nn.Module):

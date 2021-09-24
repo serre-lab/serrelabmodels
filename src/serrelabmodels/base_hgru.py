@@ -4,13 +4,14 @@ import torch
 import numpy as np
 from torch.nn import init
 
-from layers.hgru_base import hConvGRUCell
+from serrelabmodels.layers.hgru_base import hConvGRUCell
 
-from utils.pt_utils import Conv2dSamePadding
-from utils import pt_utils
+from serrelabmodels.utils.pt_utils import Conv2dSamePadding
+from serrelabmodels.utils import pt_utils
 
-from ops import model_tools
+from serrelabmodels.ops import model_tools
 
+# TODO: need to change the weight path for the vgg_example
 vgg_example={
     'name': 'vgg_hgru',
     'import_prepath': 'models.vgg_16',

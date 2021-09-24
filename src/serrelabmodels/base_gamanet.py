@@ -15,13 +15,13 @@ import torch
 import numpy as np
 from torch.nn import init
 
-from layers.fgru_base import fGRUCell2 as fGRUCell
-from layers.fgru_base import fGRUCell2_td as fGRUCell_td
+from serrelabmodels.layers.fgru_base import fGRUCell2 as fGRUCell
+from serrelabmodels.layers.fgru_base import fGRUCell2_td as fGRUCell_td
 
-from utils.pt_utils import Conv2dSamePadding
-from utils import pt_utils
+from serrelabmodels.utils.pt_utils import Conv2dSamePadding
+from serrelabmodels.utils import pt_utils
 
-from ops import model_tools
+from serrelabmodels.ops import model_tools
 
 vgg_example={
     'name': 'vgg_16',
