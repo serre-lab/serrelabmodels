@@ -421,12 +421,12 @@ class GALA_Attention(nn.Module):
         super().__init__()
 
         self.se = SE_Attention(input_size, output_size, 1, layers, 
-                                normalization=normalization, # 'BatchNorm2D'
+                                normalization=normalization,
                                 normalization_params=normalization_params,
                                 non_linearity=non_linearity,
                                 norm_pre_nl=norm_pre_nl)
         self.sa = SA_Attention(input_size, 1, saliency_filter_size, layers,
-                                normalization=normalization, # 'BatchNorm2D'
+                                normalization=normalization,
                                 normalization_params=normalization_params,
                                 non_linearity=non_linearity,
                                 norm_pre_nl=norm_pre_nl)

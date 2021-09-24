@@ -2,16 +2,11 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 import numpy as np
-# import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 import matplotlib as mpl
 mpl.use('Agg')
 import pylab as plt
-print(plt.get_backend())
-# plt.ion()
-# plt.show()
-
 
 def real_number_batch_to_indexes(real_numbers, bins):
     """Converts a batch of real numbers to a batch of one hot vectors for the bins the real numbers fall in."""
@@ -51,7 +46,6 @@ def plot_grad_flow_v2(named_parameters):
     plt.xticks(range(0,len(ave_grads), 1), layers, rotation="vertical")
     plt.xlim(left=0, right=len(ave_grads))
     plt.yscale('log')
-    #plt.ylim(bottom = -0.001, top=0.02) # zoom in on the lower gradient regions
     plt.xlabel("Layers")
     plt.ylabel("average gradient")
     plt.title("Gradient flow")
@@ -117,8 +111,6 @@ def conv2d_same_padding(input, weight, bias=None, stride=(1,1), padding=(1,1), d
                         (filter_rows - 1) * dilation[0] + 1 - input_rows)
     cols_odd = (padding_rows % 2 != 0)
 
-    # if rows_odd or cols_odd:
-    #     input = F.pad(input, [0, int(cols_odd), 0, int(rows_odd)], mode=padding_mode)
     output = F.pad(input, [(padding_cols // 2), (padding_cols // 2)+int(cols_odd), (padding_rows // 2), (padding_rows // 2)+int(rows_odd)], mode=padding_mode)
     
     return F.conv2d(output, weight, bias, stride, padding=(0,0), dilation=dilation, groups=groups)
@@ -137,9 +129,6 @@ def tied_conv2d_same_padding(input, weight, bias=None, pool_size=(3,3), stride=(
     padding_cols = max(0, (out_rows - 1) * stride[0] +
                         (filter_rows - 1) * dilation[0] + 1 - input_rows)
     cols_odd = (padding_rows % 2 != 0)
-
-    # if rows_odd or cols_odd:
-    #     input = F.pad(input, [0, int(cols_odd), 0, int(rows_odd)], mode=padding_mode)
     input_ = F.pad(input, [(padding_cols // 2), (padding_cols // 2)+int(cols_odd), (padding_rows // 2), (padding_rows // 2)+int(rows_odd)], mode=padding_mode)
     input_2 = F.conv2d(input_, weight, bias, stride, padding=(0,0), dilation=dilation, groups=groups)
     return F.avg_pool2d(input_2, pool_size, stride=(1,1))
@@ -159,12 +148,7 @@ def space_tied_conv2d_same_padding(input, weight, bias=None, stride=(1,1), paddi
                         (filter_rows - 1) * dilation[0] + 1 - input_rows)
     cols_odd = (padding_rows % 2 != 0)
 
-    # if rows_odd or cols_odd:
-    #     input = F.pad(input, [0, int(cols_odd), 0, int(rows_odd)], mode=padding_mode)
-    # i_s = input.shape
     input_ = F.pad(input, [(padding_cols // 2), (padding_cols // 2)+int(cols_odd), (padding_rows // 2), (padding_rows // 2)+int(rows_odd)], mode=padding_mode)
-    # i_ps = input.shape
-    # output = F.conv2d(input.view((-1,1)+i_ps[2:]), weight, bias, stride, padding=(0,0), dilation=dilation, groups=groups)
     output = F.conv3d(input_.unsqueeze(1), weight.unsqueeze(2), bias, (1,)+stride, padding=(0,0,0), dilation=(1,)+dilation, groups=groups)
     return output.squeeze(1)
     
@@ -192,18 +176,6 @@ class Conv2dPad(nn.Conv2d):
         return F.conv2d(F.pad(input, expanded_padding, mode=padding_mode),
                         weight, self.bias, self.stride,
                         (0,0), self.dilation, self.groups)
-
-# class TiedConv2dSamePad(nn.Conv2d):
-#     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-#                  padding=0, dilation=1, groups=1,
-#                  bias=True, padding_mode='zeros'):
-#         super().__init__(in_channels, out_channels, kernel_size, stride,
-#                  padding, dilation, groups, bias, padding_mode)
-
-#     def forward(self, input):
-#         return conv2d_same_padding(input, self.weight, self.bias, self.stride, self.padding, self.dilation, self.groups,padding_mode=self.padding_mode)
-
-
 
 def get_nl(name, fun=False, **kwargs):
     if hasattr(F, name) and fun:
