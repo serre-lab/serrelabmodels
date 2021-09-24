@@ -23,7 +23,7 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serre
 
 #### hGRU
 
-```
+```python
 import serrelabmodels.base_hgru
 hgru_model = serrelabmodels.base_hgru.BasehGRU()
 ```
@@ -36,14 +36,14 @@ hgru_model = serrelabmodels.base_hgru.BasehGRU()
 
 #### KuraNet
 
-```
+```python
 import serrelabmodels.kuranet
 kuranet_model = serrelabmodels.kuranet.KuraNet(<feature_dimensions>)
 ```
 
 #### GamaNet
 
-```
+```python
 import serrelabmodels.base_gamanet
 gamanet_model = serrelabmodels.base_gamanet.BaseGN()
 ```
@@ -52,7 +52,7 @@ gamanet_model = serrelabmodels.base_gamanet.BaseGN()
 
 #### hGRU
 
-```
+```python
 >>> import serrelabmodels.base_hgru
 agg
 >>> b = serrelabmodels.base_hgru.BasehGRU()
@@ -89,48 +89,9 @@ BasehGRU(
     (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
     (8): ReLU()
   )
-  (h_units): ModuleList(
-    (0): hConvGRUCell(
-      (u1_gate): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
-      (u2_gate): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
-      (bn): ModuleList(
-        (0): BatchNorm2d(128, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (1): BatchNorm2d(128, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (2): BatchNorm2d(128, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (3): BatchNorm2d(128, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): hConvGRUCell(
-      (u1_gate): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
-      (u2_gate): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
-      (bn): ModuleList(
-        (0): BatchNorm2d(256, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (1): BatchNorm2d(256, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (2): BatchNorm2d(256, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (3): BatchNorm2d(256, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (2): hConvGRUCell(
-      (u1_gate): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
-      (u2_gate): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
-      (bn): ModuleList(
-        (0): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (1): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (2): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (3): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (3): hConvGRUCell(
-      (u1_gate): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
-      (u2_gate): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
-      (bn): ModuleList(
-        (0): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (1): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (2): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-        (3): BatchNorm2d(512, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-  )
+
+  ...
+  
   (ds_blocks): ModuleList(
     (0): Sequential(
       (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
@@ -167,7 +128,7 @@ BasehGRU(
 
 #### KuraNet
 
-```
+```python
 >>> import serrelabmodels.kuranet
 >>> k = serrelabmodels.kuranet.KuraNet(5)
 >>> k
@@ -187,7 +148,7 @@ KuraNet(
 
 ### GamaNet
 
-```
+```python
 >>> import serrelabmodels.base_gamanet
 >>> g = serrelabmodels.base_gamanet.BaseGN()
 importing  serrelabmodels.models.vgg_16 . VGG_16
@@ -223,214 +184,9 @@ BaseGN(
     (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
     (8): ReLU()
   )
-  (h_units): ModuleList(
-    (0): fGRUCell2(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(128, 64, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(64, 128, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(128, 64, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(64, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-    (1): fGRUCell2(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(256, 128, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(128, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(256, 128, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(128, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-    (2): fGRUCell2(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(512, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(256, 512, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(512, 256, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(256, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-    (3): fGRUCell2(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(512, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(256, 512, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(512, 256, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(256, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-  )
-  (ds_blocks): ModuleList(
-    (0): Sequential(
-      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (1): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (2): ReLU()
-      (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (4): ReLU()
-      (5): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (6): ReLU()
-    )
-    (1): Sequential(
-      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (1): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (2): ReLU()
-      (3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (4): ReLU()
-      (5): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (6): ReLU()
-    )
-    (2): Sequential(
-      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (2): ReLU()
-      (3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (4): ReLU()
-      (5): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (6): ReLU()
-    )
-  )
-  (td_units): ModuleList(
-    (0): fGRUCell2_td(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(512, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(256, 512, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(512, 256, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(256, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-    (1): fGRUCell2_td(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(256, 128, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(128, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(256, 128, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(128, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-    (2): fGRUCell2_td(
-      (ff_nl): ReLU()
-      (attention): GALA_Attention(
-        (se): SE_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(128, 64, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(64, 128, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-        (sa): SA_Attention(
-          (attention): Sequential(
-            (0): Conv2dSamePadding(128, 64, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (1): ReLU()
-            (2): Conv2dSamePadding(64, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
-            (3): ReLU()
-          )
-        )
-      )
-      (bn_g1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_g2): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (bn_c2): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-    )
-  )
+    
+    ...
+    
   (us_blocks): ModuleList(
     (0): Sequential(
       (0): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
