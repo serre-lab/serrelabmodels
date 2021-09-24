@@ -4,7 +4,6 @@ from serrelabmodels.utils import py_utils
 import sys
 import logging
 
-
 def main(cfg):
     logging.info(cfg.pretty())
 

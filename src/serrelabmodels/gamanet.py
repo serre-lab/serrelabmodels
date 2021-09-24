@@ -96,7 +96,6 @@ class BaseGN(nn.Module):
         }
         
         self.base_ff = model_tools.get_model(base_ff)
-        #VGG_16(weights_path=weights_path, load_weights=load_weights)
 
         self.build_fb_layers()
         self.skip_horizontal = skip_horizontal
@@ -136,9 +135,6 @@ class BaseGN(nn.Module):
 
         # last downsampling output block
         if layer_pos+1 < len(base_layers):
-
-            # block_layers = [getattr(self.base_ff,k) for k in base_layers[prev_pos:len(base_layers)]]
-            # nn.Sequential(*block_layers) if len(block_layers)!=1 else block_layers[0]
             self.output_block = self.create_ds_block(base_layers[prev_pos:len(base_layers)])
             
         td_feats = feats

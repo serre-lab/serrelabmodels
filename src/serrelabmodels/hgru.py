@@ -11,7 +11,6 @@ from serrelabmodels.utils import pt_utils
 
 from serrelabmodels.ops import model_tools
 
-# TODO: need to change the weight path for the vgg_example
 vgg_example={
     'name': 'vgg_hgru',
     'import_prepath': 'serrelabmodels.models.vgg_16',
