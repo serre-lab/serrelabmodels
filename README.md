@@ -38,7 +38,7 @@ hgru_model = serrelabmodels.base_hgru.BasehGRU()
 
 ```
 import serrelabmodels.kuranet
-kuranet_model = serrelabmodels.kuranet.KuraNet(<parameters>)
+kuranet_model = serrelabmodels.kuranet.KuraNet(<feature_dimensions>)
 ```
 
 #### GamaNet
@@ -46,4 +46,30 @@ kuranet_model = serrelabmodels.kuranet.KuraNet(<parameters>)
 ```
 import serrelabmodels.base_gamanet
 gamanet_model = serrelabmodels.base_gamanet.BaseGN()
+```
+
+## Examples:
+
+#### hGRU
+
+
+
+#### KuraNet
+
+```
+>>> import serrelabmodels.kuranet
+>>> k = serrelabmodels.kuranet.KuraNet(5)
+>>> k
+KuraNet(
+  (layers): Sequential(
+    (0): Linear(in_features=10, out_features=128, bias=True)
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): Linear(in_features=128, out_features=128, bias=True)
+    (4): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): LeakyReLU(negative_slope=0.01)
+    (6): Linear(in_features=128, out_features=1, bias=False)
+  )
+)
+
 ```
