@@ -163,10 +163,7 @@ class fGRUCell(nn.Module):
                 init.xavier_normal_(previous_state)
 
         i = timestep
-        
         h2_int = previous_state
-        
-        ############## circuit input
         
         if hasattr(self,'attention'):
             g1 = self.attention(h2_int)
@@ -176,8 +173,7 @@ class fGRUCell(nn.Module):
         # g1_intermediate
         g1_n = self.bn_g1(g1 + self.conv_g1_b) if self.normalization_gate is not None else g1
         
-
-        # this changed from conv -> bn(in) -> bias -> sigmoid
+        # This changed from conv -> bn(in) -> bias -> sigmoid
         #                to conv -> sigmoid -> bn (beta is chronos)
         h2_int_2 = h2_int * torch.sigmoid(g1_n)
 
@@ -192,15 +188,9 @@ class fGRUCell(nn.Module):
             c1 = conv2d_same_padding(h2_int_2,self.conv_c1_w, padding_mode='reflect')
 
         c1_n = self.bn_c1(c1) if self.normalization_fgru is not None else c1
-
         h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * previous_state + self.mu) * c1_n))
-        
-        ############## circuit output
-
         g2 = conv2d_same_padding(h1, self.conv_g2_w)
-
         g2_n = self.bn_g2(g2 + self.conv_g2_b) if self.normalization_gate is not None else g2
-
         g2_s = torch.sigmoid(g2_n)
 
         if self.tied_kernels=='channel':
@@ -213,10 +203,7 @@ class fGRUCell(nn.Module):
             c2 = conv2d_same_padding(h1, self.conv_c2_w, padding_mode='reflect')
 
         c2_n = self.bn_c2(c2) if self.normalization_fgru is not None else c2
-        
-        ############## output integration
         h2_hat = self.ff_nl( self.kappa*(h1 + c2_n) + self.omega*(h1 * c2_n) )
-
         h2 = (1 - g2_s) * previous_state + g2_s * h2_hat
         
         return h2, h1
@@ -234,10 +221,8 @@ class fGRUCell_topdown(fGRUCell):
                 init.xavier_normal_(previous_state)
 
         i = timestep
-        
         h2_int = previous_state
         
-        ############## circuit input
         if hasattr(self,'attention'):
             g1 = self.attention(h2_int)
         else:
@@ -246,12 +231,10 @@ class fGRUCell_topdown(fGRUCell):
         # g1_intermediate
         g1_n = self.bn_g1(g1 + self.conv_g1_b) if self.normalization_gate is not None else g1
         
-
-        # this changed from conv -> bn(in) -> bias -> sigmoid
+        # This changed from conv -> bn(in) -> bias -> sigmoid
         #                to conv -> sigmoid -> bn (beta is chronos)
         h2_int_2 = h2_int * torch.sigmoid(g1_n)
 
-        # c1 -> conv2d symmetric_weights, dilations
         if self.tied_kernels=='channel':
             c1 = tied_conv2d_same_padding(h2_int_2,self.conv_c1_w,pool_size=(self.kernel_size,self.kernel_size), padding_mode='reflect')
         elif self.tied_kernels=='spatial':
@@ -262,15 +245,9 @@ class fGRUCell_topdown(fGRUCell):
             c1 = conv2d_same_padding(h2_int_2,self.conv_c1_w, padding_mode='reflect')
 
         c1_n = self.bn_c1(c1) if self.normalization_fgru is not None else c1
-
         h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * previous_state + self.mu) * c1_n))
-        
-        ############## circuit output
-
         g2 = conv2d_same_padding(h1, self.conv_g2_w)
-
         g2_n = self.bn_g2(g2 + self.conv_g2_b) if self.normalization_gate is not None else g2
-
         g2_s = torch.sigmoid(g2_n)
 
         if self.tied_kernels=='channel':
@@ -283,8 +260,6 @@ class fGRUCell_topdown(fGRUCell):
             c2 = conv2d_same_padding(h1, self.conv_c2_w, padding_mode='reflect')
 
         c2_n = self.bn_c2(c2) if self.normalization_fgru is not None else c2
-        
-        ############## output integration
         h2_hat = self.ff_nl( self.kappa*(h1 + c2_n) + self.omega*(h1 * c2_n) )
         h2 = (1 - g2_s) * input_ + g2_s * h2_hat
         
@@ -359,7 +334,7 @@ class SA_Attention(nn.Module):
                 output_size, 
                 filter_size, 
                 layers, 
-                normalization='InstanceNorm2d', # 'BatchNorm2D'
+                normalization='InstanceNorm2d',
                 normalization_params=None,
                 non_linearity='ReLU',
                 norm_pre_nl=False):
@@ -406,6 +381,7 @@ class SA_Attention(nn.Module):
     def forward(self, input_):
         return self.attention(input_)
 
+
 class GALA_Attention(nn.Module):
     """ if layers > 1  downsample til spatial saliency is 1 """
     def __init__(self, 
@@ -413,7 +389,7 @@ class GALA_Attention(nn.Module):
                 output_size, 
                 saliency_filter_size, 
                 layers, 
-                normalization='InstanceNorm2d', # 'BatchNorm2D'
+                normalization='InstanceNorm2d',
                 normalization_params=None,
                 non_linearity='ReLU',
                 norm_pre_nl=False):
