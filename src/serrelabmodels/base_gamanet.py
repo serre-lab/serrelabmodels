@@ -25,10 +25,10 @@ from serrelabmodels.ops import model_tools
 
 vgg_example={
     'name': 'vgg_16',
-    'import_prepath': 'models.vgg_16',
+    'import_prepath': 'serrelabmodels.models.vgg_16',
     'import_class': 'VGG_16',
     'args': {
-        'weight_path': '/media/data_cifs/aimen/CC_experiments/model_weights/vgg_16.pth.tar',
+        'weight_path': '/media/data_cifs/model_weights/vgg16.tar.xz',
         'load_weights': True,
         'freeze_layers': True,
         'n_layers': 17
