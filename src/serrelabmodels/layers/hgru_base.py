@@ -22,6 +22,12 @@ class hConvGRUCell(nn.Module):
                 bn_weight = 0.1
                 ):
 
+        # alpha     : Control linear inhibition by C_1
+        # gamma     : Scales excitation by C_2
+        # kappa     : Control linear contributions of horizontal connections to H
+        # w         : Control quadratic contributions of horizontal connections to H
+        # mu        : Control linear inhibition by C_1
+
         super().__init__()
 
         self.padding = kernel_size // 2
@@ -72,32 +78,33 @@ class hConvGRUCell(nn.Module):
 
 
     def forward(self, input_, previous_state, timestep = 0):
+        # H_2[t-1] -> Previous state [h2_tminus1]
+        # H_1[t] -> Next State [h1_t]
+        # G_1 -> Reset gate in hidden states
+        # G_2 -> Update gate in hidden states
 
-        if timestep == 0 and previous_state is not None:
-            previous_state = torch.empty_like(input_)
-            init.xavier_normal_(previous_state)
+        h2_tminus1 = previous_state
+        if timestep == 0 and h2_tminus1 is not None:
+            h2_tminus1 = torch.empty_like(input_)
+            init.xavier_normal_(h2_tminus1)
         
         i = timestep
         if self.batchnorm:
-            g1_t = torch.sigmoid(self.bn[0](self.u1_gate(previous_state)))
-            c1_t = self.bn[1](F.conv2d(previous_state * g1_t, self.w_gate_inh, padding=self.padding))
-            
-            next_state = F.relu(input_ - F.relu(c1_t*(self.alpha*previous_state + self.mu)))
-            
-            g2_t = torch.sigmoid(self.bn[2](self.u2_gate(next_state)))
-            c2_t = self.bn[3](F.conv2d(next_state, self.w_gate_exc, padding=self.padding))
-            
-            h2_t = F.relu(self.kappa*next_state + self.gamma*c2_t + self.w*next_state*c2_t)
-            
-            new_state = (1 - g2_t)*previous_state + g2_t*h2_t
+            g1_t = torch.sigmoid(self.bn[0](self.u1_gate(h2_tminus1)))
+            c1_t = self.bn[1](F.conv2d(h2_tminus1 * g1_t, self.w_gate_inh, padding=self.padding))
+            h1_t = F.relu(input_ - F.relu(c1_t*(self.alpha*h2_tminus1 + self.mu)))
+            g2_t = torch.sigmoid(self.bn[2](self.u2_gate(h1_t)))
+            c2_t = self.bn[3](F.conv2d(h1_t, self.w_gate_exc, padding=self.padding))            
+            h2_t = F.relu(self.kappa*h1_t + self.gamma*c2_t + self.w*h1_t*c2_t)
+            new_state = (1 - g2_t)*h2_tminus1 + g2_t*h2_t
 
         else:
-            g1_t = F.sigmoid(self.u1_gate(previous_state))
-            c1_t = F.conv2d(previous_state * g1_t, self.w_gate_inh, padding=self.padding)
-            next_state = F.tanh(input_ - c1_t*(self.alpha*previous_state + self.mu))
-            g2_t = F.sigmoid(self.bn[2](self.u2_gate(next_state)))
-            c2_t = F.conv2d(next_state, self.w_gate_exc, padding=self.padding)
-            h2_t = F.tanh(self.kappa*(next_state + self.gamma*c2_t) + (self.w*(next_state*(self.gamma*c2_t))))
-            new_state = self.n[timestep]*((1 - g2_t)*previous_state + g2_t*h2_t)
+            g1_t = F.sigmoid(self.u1_gate(h2_tminus1))
+            c1_t = F.conv2d(h2_tminus1 * g1_t, self.w_gate_inh, padding=self.padding)
+            h1_t = F.tanh(input_ - c1_t*(self.alpha*h2_tminus1 + self.mu))
+            g2_t = F.sigmoid(self.bn[2](self.u2_gate(h1_t)))
+            c2_t = F.conv2d(h1_t, self.w_gate_exc, padding=self.padding)
+            h2_t = F.tanh(self.kappa*(h1_t + self.gamma*c2_t) + (self.w*(h1_t*(self.gamma*c2_t))))
+            new_state = self.n[timestep]*((1 - g2_t)*h2_tminus1 + g2_t*h2_t)
 
-        return new_state, next_state
+        return new_state, h1_t
