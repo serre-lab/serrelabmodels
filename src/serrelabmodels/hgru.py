@@ -33,7 +33,9 @@ class BasehGRU(nn.Module):
     def __init__(self, 
                 base_ff=vgg_example,
                 hgru_params=hgru_params_example,
-                timesteps=6):
+                timesteps=6,
+                eps = 0.01
+                ):
         super().__init__()
 
         self.hgru_params = hgru_params
@@ -41,7 +43,7 @@ class BasehGRU(nn.Module):
         self.base_ff = model_tools.get_model(base_ff)
         self.build_fb_layers()
 
-        self.eps = 0.01
+        self.eps = eps
     
     def build_fb_layers(self):
         self.h_units = []
