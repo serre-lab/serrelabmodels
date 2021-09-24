@@ -29,12 +29,12 @@ hgru_params_example = [['conv2_2', 9],
                     ['conv5_3', 9],]
 
 class BasehGRU(nn.Module):
-
     def __init__(self, 
                 base_ff=vgg_example,
                 hgru_params=hgru_params_example,
                 timesteps=6,
                 ):
+
         super().__init__()
 
         self.hgru_params = hgru_params
@@ -61,7 +61,6 @@ class BasehGRU(nn.Module):
                             kernel_size = k_size)
             h_unit.train()
             self.h_units.append(h_unit)
-
             self.ds_blocks.append(self.create_ds_block(base_layers[prev_pos:layer_pos]))
             prev_pos = layer_pos
 
@@ -70,9 +69,7 @@ class BasehGRU(nn.Module):
             self.output_block = self.create_ds_block(base_layers[prev_pos:len(base_layers)])
         
         self.input_block = self.ds_blocks.pop(0)
-        
         self.output_feats = feats
-
         self.h_units = nn.ModuleList(self.h_units)
         self.ds_blocks = nn.ModuleList(self.ds_blocks)
 
@@ -111,9 +108,7 @@ class BasehGRU(nn.Module):
                     hidden = torch.empty_like(x)
                     init.xavier_normal_(hidden)
                     h_hidden[l] = hidden
-
                 hidden, _ = self.h_units[l](x, h_hidden[l], timestep=i)
-                
                 dist = (hidden - h_hidden[l]) ** 2
                 accum_dist += dist.view(dist.size(0), -1).mean(1)
 
