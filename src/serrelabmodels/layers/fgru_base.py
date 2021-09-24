@@ -217,7 +217,7 @@ class fGRUCell(nn.Module):
         
         return h2, h1
 
-class fGRUCell_td(fGRUCell):
+class fGRUCell_topdown(fGRUCell):
     def forward(self, input_, prev_state2, timestep=0):
         if timestep == 0 and prev_state2 is None:
             if self.hidden_init =='identity':
