@@ -19,27 +19,27 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serre
 
 ### Importing the required model
 
-hGRU
+#### hGRU
 
 ```
 import serrelabmodels.base_hgru
 hgru_model = serrelabmodels.base_hgru.BasehGRU()
 ```
 
-fGRU
+#### fGRU
 
 ```
 # In-progress
 ```
 
-KuraNet
+#### KuraNet
 
 ```
 import serrelabmodels.kuranet
 kuranet_model = serrelabmodels.kuranet.KuraNet(<parameters>)
 ```
 
-GamaNet
+#### GamaNet
 
 ```
 import serrelabmodels.base_gamanet
