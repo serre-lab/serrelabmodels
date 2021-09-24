@@ -3,7 +3,7 @@ import torch.nn.functional as F
 import torch
 from torch.nn import init
 
-class hConvGRUCell(nn.Module):
+class hGRUCell(nn.Module):
     """
     Generate a convolutional GRU cell
     """

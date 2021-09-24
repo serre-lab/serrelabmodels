@@ -5,7 +5,7 @@ import numpy as np
 from torch.nn import init
 
 
-from serrelabmodels.layers.hgru_base import hConvGRUCell
+from serrelabmodels.layers.hgru_cell import hGRUCell
 
 
 class VGG_16(nn.Module):

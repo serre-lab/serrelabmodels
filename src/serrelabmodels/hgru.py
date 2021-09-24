@@ -5,7 +5,7 @@ import numpy as np
 from torch.nn import init
 import torchvision.models as models
 
-from serrelabmodels.layers.hgru_base import hConvGRUCell
+from serrelabmodels.layers.hgru_cell import hGRUCell
 
 from serrelabmodels.utils.pt_utils import Conv2dSamePadding
 from serrelabmodels.utils import pt_utils
