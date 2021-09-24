@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="serrelabmodels",
-    version="0.0.3",
+    version="0.0.6",
     author='Akash Nagaraj',
     author_email='akash_n@brown.edu',
     description='Package to import in-house models from the Serre Lab at Brown University.',
@@ -20,7 +20,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src"),
+    packages=['serrelabmodels'],
     python_requires=">=3.6",
 )
