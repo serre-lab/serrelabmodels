@@ -3,6 +3,7 @@ import torch.nn.functional as F
 import torch
 import numpy as np
 from torch.nn import init
+import torchvision.models as models
 
 from serrelabmodels.layers.hgru_base import hConvGRUCell
 
@@ -39,7 +40,8 @@ class BasehGRU(nn.Module):
 
         self.hgru_params = hgru_params
         self.timesteps = timesteps
-        self.base_ff = model_tools.get_model(base_ff)
+        # self.base_ff = model_tools.get_model(base_ff)
+        self.base_ff = models.vgg16(pretrained=True)
         self.build_fb_layers()
     
     def build_fb_layers(self):
@@ -86,9 +88,7 @@ class BasehGRU(nn.Module):
     def forward(self, x, return_hidden=False):
         
         h_hidden = [None] * len(self.h_units)
-        
         conv_input = self.input_block(x)
-
         last_hidden = []
         
         selector = torch.ones(x.shape[0]).byte().to(x.device)
