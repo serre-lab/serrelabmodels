@@ -11,7 +11,9 @@ The repository currently includes the following models:
 ## Usage:
 ### Installing the module from pip
 
-`python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serrelabmodels`
+```
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serrelabmodels
+```
 
 ---
 
@@ -19,22 +21,27 @@ The repository currently includes the following models:
 
 hGRU
 
-`import serrelabmodels.base_hgru`
-
-`hgru_model = serrelabmodels.base_hgru.BasehGRU()`
+```
+import serrelabmodels.base_hgru
+hgru_model = serrelabmodels.base_hgru.BasehGRU()
+```
 
 fGRU
 
-`# In-progress`
+```
+# In-progress
+```
 
 KuraNet
 
-`import serrelabmodels.kuranet`
-
-`kuranet_model = serrelabmodels.kuranet.KuraNet(<parameters>)`
+```
+import serrelabmodels.kuranet
+kuranet_model = serrelabmodels.kuranet.KuraNet(<parameters>)
+```
 
 GamaNet
 
-`import serrelabmodels.base_gamanet`
-
-`gamanet_model = serrelabmodels.base_gamanet.BaseGN()`
+```
+import serrelabmodels.base_gamanet
+gamanet_model = serrelabmodels.base_gamanet.BaseGN()
+```
