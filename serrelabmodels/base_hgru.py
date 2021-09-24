@@ -6,8 +6,8 @@ from torch.nn import init
 
 from layers.hgru_base import hConvGRUCell
 
-from utilities.pt_utils import Conv2dSamePadding
-from utilities import pt_utils
+from utils.pt_utils import Conv2dSamePadding
+from utils import pt_utils
 
 from ops import model_tools
 
