@@ -19,7 +19,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="serrelabmodels",
-    version="0.0.10",
+    version="0.0.11",
     author='Akash Nagaraj',
     author_email='akash_n@brown.edu',
     description='Package to import in-house models from the Serre Lab at Brown University.',
