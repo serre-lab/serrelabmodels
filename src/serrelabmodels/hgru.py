@@ -45,7 +45,6 @@ class BasehGRU(nn.Module):
         self.eps = 0.01
     
     def build_fb_layers(self):
-    # def build_hgru_units(self):
         self.h_units = []
         self.ds_blocks = []
         
@@ -70,9 +69,6 @@ class BasehGRU(nn.Module):
 
         # last downsampling output block
         if layer_pos+1 < len(base_layers):
-
-            # block_layers = [getattr(self.base_ff,k) for k in base_layers[prev_pos:len(base_layers)]]
-            # nn.Sequential(*block_layers) if len(block_layers)!=1 else block_layers[0]
             self.output_block = self.create_ds_block(base_layers[prev_pos:len(base_layers)])
         
         self.input_block = self.ds_blocks.pop(0)
