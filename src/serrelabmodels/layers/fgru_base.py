@@ -17,26 +17,31 @@ class fGRUCell(nn.Module):
                 input_size, 
                 hidden_size, 
                 kernel_size,
-                hidden_init='identity',
-                attention='gala', # 'se', None
-                attention_layers=2,
-                saliency_filter_size=5,
-                tied_kernels=None,
-                norm_attention=False,
-                normalization_fgru='InstanceNorm2d',
-                normalization_fgru_params={'affine': True},
-                normalization_gate='InstanceNorm2d',
-                normalization_gate_params={'affine': True},
-                ff_non_linearity='ReLU',
-                force_alpha_divisive=True,
-                force_non_negativity=True,
-                multiplicative_excitation=True,
-                gate_bias_init='chronos', #'ones'
-                timesteps=8
+                hidden_init = 'identity',
+                attention = 'gala',
+                attention_layers = 2,
+                saliency_filter_size = 5,
+                tied_kernels = None,
+                norm_attention = False,
+                normalization_fgru = 'InstanceNorm2d',
+                normalization_fgru_params = {'affine': True},
+                normalization_gate = 'InstanceNorm2d',
+                normalization_gate_params = {'affine': True},
+                ff_non_linearity = 'ReLU',
+                force_alpha_divisive = True,
+                force_non_negativity = True,
+                multiplicative_excitation = True,
+                gate_bias_init = 'chronos',
+                timesteps = 8,
+                alpha = 0.1,
+                mu = 1.0, 
+                omega = 0.5,
+                kappa = 0.5
                 ):
+
         super().__init__()
         
-        self.padding = 'same' # kernel_size // 2
+        self.padding = 'same'
 
         self.kernel_size = kernel_size
         self.tied_kernels = tied_kernels
@@ -80,7 +85,7 @@ class fGRUCell(nn.Module):
                                                 non_linearity=ff_non_linearity,
                                                 norm_pre_nl=False)
             else:
-                raise 'attention type unknown'
+                raise 'Attention type unknown.'
         else:
             self.conv_g1_w = nn.Parameter(torch.empty(hidden_size , hidden_size, 1, 1))
             init.orthogonal_(self.conv_g1_w)
@@ -140,27 +145,26 @@ class fGRUCell(nn.Module):
         self.omega = nn.Parameter(torch.empty((hidden_size,1,1)))
         self.kappa = nn.Parameter(torch.empty((hidden_size,1,1)))
         
-        init.constant_(self.alpha, 0.1)
-        init.constant_(self.mu, 1.0)
+        init.constant_(self.alpha, alpha)
+        init.constant_(self.mu, mu)
+        init.constant_(self.omega, omega)
+        init.constant_(self.kappa, kappa)
 
-        init.constant_(self.omega, 0.5)
-        init.constant_(self.kappa, 0.5)
-
-    def forward(self, input_, prev_state2, timestep=0):        
-        if timestep == 0 and prev_state2 is None:
+    def forward(self, input_, previous_state, timestep=0):        
+        if timestep == 0 and previous_state is None:
             
             if self.hidden_init =='identity':
-                prev_state2 = input_
+                previous_state = input_
             elif self.hidden_init =='zero':
-                prev_state2 = torch.empty_like(input_)
-                init.zeros_(prev_state2)
+                previous_state = torch.empty_like(input_)
+                init.zeros_(previous_state)
             else:
-                prev_state2 = torch.empty_like(input_)
-                init.xavier_normal_(prev_state2)
+                previous_state = torch.empty_like(input_)
+                init.xavier_normal_(previous_state)
 
         i = timestep
         
-        h2_int = prev_state2
+        h2_int = previous_state
         
         ############## circuit input
         
@@ -189,7 +193,7 @@ class fGRUCell(nn.Module):
 
         c1_n = self.bn_c1(c1) if self.normalization_fgru is not None else c1
 
-        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * prev_state2 + self.mu) * c1_n))
+        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * previous_state + self.mu) * c1_n))
         
         ############## circuit output
 
@@ -213,25 +217,25 @@ class fGRUCell(nn.Module):
         ############## output integration
         h2_hat = self.ff_nl( self.kappa*(h1 + c2_n) + self.omega*(h1 * c2_n) )
 
-        h2 = (1 - g2_s) * prev_state2 + g2_s * h2_hat
+        h2 = (1 - g2_s) * previous_state + g2_s * h2_hat
         
         return h2, h1
 
 class fGRUCell_topdown(fGRUCell):
-    def forward(self, input_, prev_state2, timestep=0):
-        if timestep == 0 and prev_state2 is None:
+    def forward(self, input_, previous_state, timestep=0):
+        if timestep == 0 and previous_state is None:
             if self.hidden_init =='identity':
-                prev_state2 = input_
+                previous_state = input_
             elif self.hidden_init =='zero':
-                prev_state2 = torch.empty_like(input_)
-                init.zeros_(prev_state2)
+                previous_state = torch.empty_like(input_)
+                init.zeros_(previous_state)
             else:
-                prev_state2 = torch.empty_like(input_)
-                init.xavier_normal_(prev_state2)
+                previous_state = torch.empty_like(input_)
+                init.xavier_normal_(previous_state)
 
         i = timestep
         
-        h2_int = prev_state2
+        h2_int = previous_state
         
         ############## circuit input
         if hasattr(self,'attention'):
@@ -259,7 +263,7 @@ class fGRUCell_topdown(fGRUCell):
 
         c1_n = self.bn_c1(c1) if self.normalization_fgru is not None else c1
 
-        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * prev_state2 + self.mu) * c1_n))
+        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * previous_state + self.mu) * c1_n))
         
         ############## circuit output
 
@@ -287,9 +291,8 @@ class fGRUCell_topdown(fGRUCell):
         return h2, h1
 
 
-
 class SE_Attention(nn.Module):
-    """ if layers > 1  downsample -> upsample """
+    """ If layers > 1 downsample -> upsample """
     
     def __init__(self, 
                 input_size, 
@@ -346,9 +349,10 @@ class SE_Attention(nn.Module):
     
     def forward(self, input_):
         return self.attention(input_)
+        
 
 class SA_Attention(nn.Module):
-    """ if layers > 1  downsample til 1 """
+    """ If layers > 1  downsample till 1 """
     
     def __init__(self, 
                 input_size, 
@@ -416,12 +420,12 @@ class GALA_Attention(nn.Module):
 
         super().__init__()
 
-        self.se = SE_Attention(input_size, output_size, 1,                    layers, 
+        self.se = SE_Attention(input_size, output_size, 1, layers, 
                                 normalization=normalization, # 'BatchNorm2D'
                                 normalization_params=normalization_params,
                                 non_linearity=non_linearity,
                                 norm_pre_nl=norm_pre_nl)
-        self.sa = SA_Attention(input_size, 1,           saliency_filter_size, layers,
+        self.sa = SA_Attention(input_size, 1, saliency_filter_size, layers,
                                 normalization=normalization, # 'BatchNorm2D'
                                 normalization_params=normalization_params,
                                 non_linearity=non_linearity,

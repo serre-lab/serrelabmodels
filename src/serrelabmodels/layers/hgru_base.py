@@ -20,7 +20,8 @@ class hConvGRUCell(nn.Module):
                 w = 0.5, 
                 mu = 1, 
                 bn_weight = 0.1, 
-                eps = 1e-03):
+                eps = 1e-03
+                ):
 
         super().__init__()
 
