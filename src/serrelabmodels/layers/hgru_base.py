@@ -19,8 +19,7 @@ class hConvGRUCell(nn.Module):
                 kappa = 0.5, 
                 w = 0.5, 
                 mu = 1, 
-                bn_weight = 0.1, 
-                eps = 1e-03
+                bn_weight = 0.1
                 ):
 
         super().__init__()
@@ -45,7 +44,7 @@ class hConvGRUCell(nn.Module):
         self.mu= nn.Parameter(torch.empty((hidden_size,1,1)))
 
         if self.batchnorm:
-            self.bn = nn.ModuleList([nn.BatchNorm2d(hidden_size, eps=eps) for i in range(4)])
+            self.bn = nn.ModuleList([nn.BatchNorm2d(hidden_size ) for i in range(4)])
         else:
             self.n = nn.Parameter(torch.randn(self.timesteps,1,1))
 
