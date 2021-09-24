@@ -101,7 +101,7 @@ def plot_grad_flow(named_parameters):
     plt.pause(0.001)
     return 0
 
-def conv2d_same_padding(input, weight, bias=None, stride=(1,1), padding=(1,1), dilation=(1,1), groups=1, padding_mode='constant'):
+def conv2d_same_padding(input, weight, bias=None, stride=(1,1), padding=(1,1), dilation=(1,1), groups=1, padding_mode='reflect'):
 
     input_rows = input.size(2)
     filter_rows = weight.size(2)
@@ -123,7 +123,7 @@ def conv2d_same_padding(input, weight, bias=None, stride=(1,1), padding=(1,1), d
     
     return F.conv2d(output, weight, bias, stride, padding=(0,0), dilation=dilation, groups=groups)
 
-def tied_conv2d_same_padding(input, weight, bias=None, pool_size=(3,3), stride=(1,1), padding=(1,1), dilation=(1,1), groups=1, padding_mode='constant'):
+def tied_conv2d_same_padding(input, weight, bias=None, pool_size=(3,3), stride=(1,1), padding=(1,1), dilation=(1,1), groups=1, padding_mode='reflect'):
 
     input_rows = input.size(2)
     filter_rows = pool_size[0]
@@ -144,7 +144,7 @@ def tied_conv2d_same_padding(input, weight, bias=None, pool_size=(3,3), stride=(
     input_2 = F.conv2d(input_, weight, bias, stride, padding=(0,0), dilation=dilation, groups=groups)
     return F.avg_pool2d(input_2, pool_size, stride=(1,1))
 
-def space_tied_conv2d_same_padding(input, weight, bias=None, stride=(1,1), padding=(1,1), dilation=(1,1), groups=1, padding_mode='constant'):
+def space_tied_conv2d_same_padding(input, weight, bias=None, stride=(1,1), padding=(1,1), dilation=(1,1), groups=1, padding_mode='reflect'):
 
     input_rows = input.size(2)
     filter_rows = weight.size(2)
@@ -174,7 +174,7 @@ def space_tied_conv2d_same_padding(input, weight, bias=None, stride=(1,1), paddi
 class Conv2dSamePadding(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
                  padding=0, dilation=1, groups=1,
-                 bias=True, padding_mode='constant'):
+                 bias=True, padding_mode='reflect'):
         super().__init__(in_channels, out_channels, kernel_size, stride,
                  padding, dilation, groups, bias, padding_mode)
 
@@ -185,7 +185,7 @@ class Conv2dPad(nn.Conv2d):
 
     def conv2d_forward(self, input, weight):
         if self.padding_mode=='zeros':
-            padding_mode='constant'
+            padding_mode='reflect'
         else:
             padding_mode=self.padding_mode
         expanded_padding = (self.padding[1], self.padding[1], self.padding[0], self.padding[0])

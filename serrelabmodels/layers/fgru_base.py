@@ -14,11 +14,6 @@ import numpy as np
 # TODO add different normalization types
 # TODO try varying hidden size (make it independent from input)
 
-# TODO bias init for gates (chronos) done
-# TODO code attention and add it in g1 | done
-# TODO init types for hidden (identity, zero, xavier) | done
-# TODO solve padding issue | done
-
 
 class fGRUCell(nn.Module):
     """
