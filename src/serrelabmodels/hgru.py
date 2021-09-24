@@ -40,8 +40,8 @@ class BasehGRU(nn.Module):
 
         self.hgru_params = hgru_params
         self.timesteps = timesteps
-        # self.base_ff = model_tools.get_model(base_ff)
-        self.base_ff = models.vgg16(pretrained=True)
+        self.base_ff = model_tools.get_model(base_ff)
+        # self.base_ff = models.vgg16(pretrained=True)
         self.build_fb_layers()
     
     def build_fb_layers(self):
