@@ -3,10 +3,11 @@ Repository to create a public python library to import in-house models.
 
 ## Models:
 The repository currently includes the following models:
-1. hGRU
-2. fGRU
-3. KuraNet
-4. Gamanet
+1. fGRU
+2. hGRU
+3. hGRU Example
+4. KuraNet
+5. Gamanet
 
 ## Usage:
 ### Installing the module from pip
@@ -21,34 +22,79 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serre
 
 ### Importing the required model
 
-#### hGRU
-
-```python
-import serrelabmodels.base_hgru
-hgru_model = serrelabmodels.base_hgru.BasehGRU()
-```
 
 #### fGRU
 
+```python
+import serrelabmodels.layers.fgru_cell as sl_fgru
+fgru_cell = sl_fgru.fRGUCell(5, 5, 3)
 ```
-# In-progress
+
+
+#### hGRU
+
+```python
+import serrelabmodels.layers.hgru_cell as sl_hgru
+hgru_cell =  sl_hgru.hRGUCell(5, 5, 3)
+```
+
+
+#### hGRU Example
+
+```python
+import serrelabmodels.hgru as sl_hgru_ex
+hgru_model = sl_hgru_ex.BasehGRU()
 ```
 
 #### KuraNet
 
 ```python
-import serrelabmodels.kuranet
-kuranet_model = serrelabmodels.kuranet.KuraNet(<feature_dimensions>)
+import serrelabmodels.kuranet as sl_knet
+kuranet_model = sl_knet.KuraNet(<feature_dimensions>)
 ```
 
 #### GamaNet
 
 ```python
-import serrelabmodels.base_gamanet
-gamanet_model = serrelabmodels.base_gamanet.BaseGN()
+import serrelabmodels.base_gamanet as sl_gnet
+gamanet_model = sl_gnet.BaseGN()
 ```
 
 ## Examples:
+
+### fGRUCell
+
+```python
+>>> import serrelabmodels.layers.fgru_cell as sl_fgru
+>>> fgru_cell = sl_fgru.fGRUCell(5, 5, 3)
+>>> fgru_cell
+fGRUCell(
+  (ff_nl): ReLU()
+  (attention): GALA_Attention(
+    (se): SE_Attention(
+      (attention): Sequential(
+        (0): Conv2dSamePadding(5, 2, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
+        (1): ReLU()
+        (2): Conv2dSamePadding(2, 5, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
+        (3): ReLU()
+      )
+    )
+    (sa): SA_Attention(
+      (attention): Sequential(
+        (0): Conv2dSamePadding(5, 2, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
+        (1): ReLU()
+        (2): Conv2dSamePadding(2, 1, kernel_size=(5, 5), stride=(1, 1), padding_mode=reflect)
+        (3): ReLU()
+      )
+    )
+  )
+  (bn_g1): InstanceNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
+  (bn_c1): InstanceNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
+  (bn_g2): InstanceNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
+  (bn_c2): InstanceNorm2d(5, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
+)
+
+```
 
 #### hGRUCell
 
@@ -75,12 +121,12 @@ hConvGRUCell(
 ```
 
 
-#### hGRU
+#### hGRU Example (VGG 16)
 
 ```python
->>> import serrelabmodels.base_hgru
+>>> import serrelabmodels.base_hgru as sl_hgru_ex
 agg
->>> b = serrelabmodels.base_hgru.BasehGRU()
+>>> b = sl_hgru_ex.BasehGRU()
 importing  serrelabmodels.models.vgg_16 . VGG_16
 >>> b
 BasehGRU(
@@ -103,39 +149,8 @@ BasehGRU(
     (conv5_2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
     (conv5_3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   )
-  (input_block): Sequential(
-    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (1): ReLU()
-    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (3): ReLU()
-    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (6): ReLU()
-    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (8): ReLU()
-  )
-
   ...
   
-  (ds_blocks): ModuleList(
-    (0): Sequential(
-      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (1): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (2): ReLU()
-      (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (4): ReLU()
-      (5): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (6): ReLU()
-    )
-    (1): Sequential(
-      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (1): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (2): ReLU()
-      (3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (4): ReLU()
-      (5): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-      (6): ReLU()
-    )
     (2): Sequential(
       (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
       (1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -154,8 +169,8 @@ BasehGRU(
 #### KuraNet
 
 ```python
->>> import serrelabmodels.kuranet
->>> k = serrelabmodels.kuranet.KuraNet(5)
+>>> import serrelabmodels.kuranet as sl_knet
+>>> k = sl_knet.KuraNet(5)
 >>> k
 KuraNet(
   (layers): Sequential(
@@ -174,8 +189,8 @@ KuraNet(
 ### GamaNet
 
 ```python
->>> import serrelabmodels.base_gamanet
->>> g = serrelabmodels.base_gamanet.BaseGN()
+>>> import serrelabmodels.base_gamanet as sl_gnet
+>>> g = sl_gnet.BaseGN()
 importing  serrelabmodels.models.vgg_16 . VGG_16
 >>> g
 BaseGN(
@@ -198,18 +213,6 @@ BaseGN(
     (conv5_2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
     (conv5_3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   )
-  (input_block): Sequential(
-    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (1): ReLU()
-    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (3): ReLU()
-    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (6): ReLU()
-    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (8): ReLU()
-  )
-    
     ...
     
   (us_blocks): ModuleList(
@@ -238,5 +241,4 @@ BaseGN(
   (readout_norm): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
   (readout_conv): Conv2dSamePadding(128, 1, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
 )
-
 ```
