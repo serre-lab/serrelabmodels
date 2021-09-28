@@ -215,21 +215,6 @@ BaseGN(
   )
     ...
     
-  (us_blocks): ModuleList(
-    (0): Sequential(
-      (0): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (1): Conv2dSamePadding(512, 512, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-      (2): ReLU()
-      (3): Conv2dSamePadding(512, 512, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-      (4): ReLU()
-    )
-    (1): Sequential(
-      (0): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
-      (1): Conv2dSamePadding(512, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-      (2): ReLU()
-      (3): Conv2dSamePadding(256, 256, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
-      (4): ReLU()
-    )
     (2): Sequential(
       (0): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=False)
       (1): Conv2dSamePadding(256, 128, kernel_size=(1, 1), stride=(1, 1), padding_mode=reflect)
