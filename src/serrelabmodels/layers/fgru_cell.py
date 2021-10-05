@@ -150,20 +150,20 @@ class fGRUCell(nn.Module):
         init.constant_(self.omega, omega)
         init.constant_(self.kappa, kappa)
 
-    def forward(self, input_, previous_state, timestep=0):        
-        if timestep == 0 and previous_state is None:
+    def forward(self, input_, h1_tminus1, timestep=0):        
+        if timestep == 0 and h1_tminus1 is None:
             
             if self.hidden_init =='identity':
-                previous_state = input_
+                h1_tminus1 = input_
             elif self.hidden_init =='zero':
-                previous_state = torch.empty_like(input_)
-                init.zeros_(previous_state)
+                h1_tminus1 = torch.empty_like(input_)
+                init.zeros_(h1_tminus1)
             else:
-                previous_state = torch.empty_like(input_)
-                init.xavier_normal_(previous_state)
+                h1_tminus1 = torch.empty_like(input_)
+                init.xavier_normal_(h1_tminus1)
 
         i = timestep
-        h2_int = previous_state
+        h2_int = h1_tminus1
         
         if hasattr(self,'attention'):
             g1 = self.attention(h2_int)
@@ -188,7 +188,7 @@ class fGRUCell(nn.Module):
             c1 = conv2d_same_padding(h2_int_2,self.conv_c1_w, padding_mode='reflect')
 
         c1_n = self.bn_c1(c1) if self.normalization_fgru is not None else c1
-        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * previous_state + self.mu) * c1_n))
+        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * h1_tminus1 + self.mu) * c1_n))
         g2 = conv2d_same_padding(h1, self.conv_g2_w)
         g2_n = self.bn_g2(g2 + self.conv_g2_b) if self.normalization_gate is not None else g2
         g2_s = torch.sigmoid(g2_n)
@@ -204,24 +204,24 @@ class fGRUCell(nn.Module):
 
         c2_n = self.bn_c2(c2) if self.normalization_fgru is not None else c2
         h2_hat = self.ff_nl( self.kappa*(h1 + c2_n) + self.omega*(h1 * c2_n) )
-        h2 = (1 - g2_s) * previous_state + g2_s * h2_hat
+        h2 = (1 - g2_s) * h1_tminus1 + g2_s * h2_hat
         
         return h2, h1
 
 class fGRUCell_topdown(fGRUCell):
-    def forward(self, input_, previous_state, timestep=0):
-        if timestep == 0 and previous_state is None:
+    def forward(self, input_, h1_tminus, timestep=0):
+        if timestep == 0 and h1_tminus is None:
             if self.hidden_init =='identity':
-                previous_state = input_
+                h1_tminus = input_
             elif self.hidden_init =='zero':
-                previous_state = torch.empty_like(input_)
-                init.zeros_(previous_state)
+                h1_tminus = torch.empty_like(input_)
+                init.zeros_(h1_tminus)
             else:
-                previous_state = torch.empty_like(input_)
-                init.xavier_normal_(previous_state)
+                h1_tminus = torch.empty_like(input_)
+                init.xavier_normal_(h1_tminus)
 
         i = timestep
-        h2_int = previous_state
+        h2_int = h1_tminus
         
         if hasattr(self,'attention'):
             g1 = self.attention(h2_int)
@@ -245,7 +245,7 @@ class fGRUCell_topdown(fGRUCell):
             c1 = conv2d_same_padding(h2_int_2,self.conv_c1_w, padding_mode='reflect')
 
         c1_n = self.bn_c1(c1) if self.normalization_fgru is not None else c1
-        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * previous_state + self.mu) * c1_n))
+        h1 = self.ff_nl(input_ - self.ff_nl((self.alpha * h1_tminus + self.mu) * c1_n))
         g2 = conv2d_same_padding(h1, self.conv_g2_w)
         g2_n = self.bn_g2(g2 + self.conv_g2_b) if self.normalization_gate is not None else g2
         g2_s = torch.sigmoid(g2_n)

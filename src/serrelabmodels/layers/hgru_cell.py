@@ -93,9 +93,12 @@ class hGRUCell(nn.Module):
             c1_t = self.bn[1](F.conv2d(h2_tminus1 * g1_t, self.w_gate_inh, padding=self.padding))
             h1_t = F.relu(input_ - F.relu(c1_t*(self.alpha*h2_tminus1 + self.mu)))
             g2_t = torch.sigmoid(self.bn[2](self.u2_gate(h1_t)))
-            c2_t = self.bn[3](F.conv2d(h1_t, self.w_gate_exc, padding=self.padding))            
+            c2_t = self.bn[3](F.conv2d(h1_t, self.w_gate_exc, padding=self.padding))
+            torch.transpose(h1_t, 0, 1)         
+            print("h1_t", h1_t.size())
+            print("c2_t", c2_t.size())
             h2_t = F.relu(self.kappa*h1_t + self.gamma*c2_t + self.w*h1_t*c2_t)
-            new_state = (1 - g2_t)*h2_tminus1 + g2_t*h2_t
+            h_n = (1 - g2_t)*h2_tminus1 + g2_t*h2_t
 
         else:
             g1_t = F.sigmoid(self.u1_gate(h2_tminus1))
@@ -104,6 +107,6 @@ class hGRUCell(nn.Module):
             g2_t = F.sigmoid(self.bn[2](self.u2_gate(h1_t)))
             c2_t = F.conv2d(h1_t, self.w_gate_exc, padding=self.padding)
             h2_t = F.tanh(self.kappa*(h1_t + self.gamma*c2_t) + (self.w*(h1_t*(self.gamma*c2_t))))
-            new_state = self.n[timestep]*((1 - g2_t)*h2_tminus1 + g2_t*h2_t)
+            h_n = self.n[timestep]*((1 - g2_t)*h2_tminus1 + g2_t*h2_t)
 
-        return new_state, h1_t
+        return h_n, h1_t
