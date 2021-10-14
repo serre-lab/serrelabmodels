@@ -94,9 +94,6 @@ class hGRUCell(nn.Module):
             h1_t = F.relu(input_ - F.relu(c1_t*(self.alpha*h2_tminus1 + self.mu)))
             g2_t = torch.sigmoid(self.bn[2](self.u2_gate(h1_t)))
             c2_t = self.bn[3](F.conv2d(h1_t, self.w_gate_exc, padding=self.padding))
-            torch.transpose(h1_t, 0, 1)         
-            print("h1_t", h1_t.size())
-            print("c2_t", c2_t.size())
             h2_t = F.relu(self.kappa*h1_t + self.gamma*c2_t + self.w*h1_t*c2_t)
             h_n = (1 - g2_t)*h2_tminus1 + g2_t*h2_t
 
