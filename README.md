@@ -1,5 +1,7 @@
 # Serre Lab In-house Models
 Repository to create a public python library to import in-house models.
+The models can be imported exactly like any other PyTorch module (eg: GRU).
+The models are plug-and-play and are designed to work out of the box, with no additional tinkering required. All the paramters are the same as the PyTorch GRU module.
 
 ## Models:
 The repository currently includes the following models:
