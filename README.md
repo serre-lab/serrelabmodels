@@ -12,7 +12,7 @@ The repository currently includes the following models:
 ### Installing the module from pip
 
 ```
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serrelabmodels
+pip install serrelabmodels
 ```
 
 ---
