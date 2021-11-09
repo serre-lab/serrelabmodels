@@ -15,8 +15,6 @@ The repository currently includes the following models:
 python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps serrelabmodels
 ```
 
-*_NOTE:_* This repository is uploaded to TestPyPi, and will be moved to PyPi when complete.
-
 ---
 
 ### Importing the required model
