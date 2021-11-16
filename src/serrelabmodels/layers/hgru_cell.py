@@ -5,7 +5,7 @@ from torch.nn import init
 
 class hGRUCell(nn.Module):
     """
-    Generate a convolutional GRU cell
+    Generate a convolutional hGRU cell
     """
 
     def __init__(self, 

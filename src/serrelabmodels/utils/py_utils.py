@@ -86,7 +86,6 @@ def get_config(args, cfg_folder='config', sep='-'):
 
     base_path = os.path.join(cfg_folder,'base.yaml')
     exp = args[0] + '.yaml'
-    #cfg = oc.merge(oc.load(base_path), oc.load(exp)) 
     cfg = oc.load(exp)
     cfg = recursive_load(cfg)
     overrides = args[1:]
